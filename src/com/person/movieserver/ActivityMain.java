@@ -116,7 +116,10 @@ public class ActivityMain extends Activity {
 		public void run() {
 			if (NetUtils.isNetConnected(getApplicationContext())){
 				Log.d("duhuanbiao", "网络连接完成，打开ap");
-				openWifi();
+				if (!openWifi()){
+					Log.d("duhuanbiao", "打开ap失败, 2秒后重试");
+					mVideoView.postDelayed(mWifiAPDelay, 2000);
+				}
 			}else{
 				mVideoView.postDelayed(mWifiAPDelay, 2000);
 			}
@@ -212,8 +215,7 @@ public class ActivityMain extends Activity {
 		
 		Log.d("duhuanbiao", "ssid=" + config.SSID + ";pwd=" + config.preSharedKey);
 		
-		manage.setWifiApEnabled(config, true);
-		return true;
+		return manage.setWifiApEnabled(config, true);
 	}
 
 	private void initView() {
